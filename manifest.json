@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "Lux Med — monitor terminów",
+  "version": "1.0.0",
+  "description": "Powiadamia dźwiękiem o dostępnych terminach wizyt w Lux Med.",
+  "minimum_chrome_version": "116",
+  "permissions": [
+    "alarms",
+    "offscreen",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://luxmed.pl/*",
+    "*://*.luxmed.pl/*"
+  ],
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://luxmed.pl/*",
+        "*://*.luxmed.pl/*"
+      ],
+      "js": [
+        "scripts/beforeunload.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "*://luxmed.pl/*",
+        "*://*.luxmed.pl/*"
+      ],
+      "js": [
+        "scripts/detector.js",
+        "scripts/content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

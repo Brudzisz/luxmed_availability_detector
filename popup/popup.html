@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Monitor terminów Lux Med</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main>
+      <h1>Monitor terminów</h1>
+      <p class="description">Pozostaw otwartą stronę wyszukiwania terminów Lux Med.</p>
+      <div id="status" role="status" aria-live="polite">Sprawdzanie…</div>
+      <p id="last-check" class="last-check"></p>
+      <div class="actions">
+        <button id="start" type="button">Włącz monitor</button>
+        <button id="stop" type="button" class="secondary">Wyłącz</button>
+      </div>
+      <p class="footnote">Strona będzie odświeżana automatycznie. Rozszerzenie nie rezerwuje wizyty.</p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
