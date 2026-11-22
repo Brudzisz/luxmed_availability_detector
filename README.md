@@ -1,10 +1,10 @@
 # Monitor terminów Lux Med — rozszerzenie Chrome
 
 Rozszerzenie monitoruje otwartą przez użytkownika stronę Lux Med z wynikami
-wyszukiwania terminów. Jeśli znajdzie komunikat `app-no-terms-info` albo
-podany na stronie tekst o braku dostępnych terminów, oznacza, że terminów
-brak. Jeśli wykryje stronę wyboru terminu bez tego komunikatu, odtwarza krótki
-sygnał dźwiękowy. Rozszerzenie nie loguje użytkownika ani nie rezerwuje wizyt.
+wyszukiwania terminów. Jeśli znajdzie `.no-terms-message` wewnątrz
+`app-no-terms-info`, oznacza, że terminów brak. Jeśli wykryje stronę wyboru
+terminu bez tego elementu, odtwarza krótki sygnał dźwiękowy. Rozszerzenie nie
+loguje użytkownika ani nie rezerwuje wizyt.
 
 ## Instalacja
 
@@ -24,16 +24,15 @@ ostrzeżenia strony.
 ## Wykrywanie terminów
 
 Monitor odświeża kartę tylko po rozpoznaniu strony wyników wyszukiwania.
-Rozpoznanie opiera się na elemencie `app-no-terms-info`, komunikacie o braku
-terminów, tekście dotyczącym wyboru terminu lub adresie strony. Weryfikacja
+Rozpoznanie opiera się na elemencie `app-no-terms-info .no-terms-message`,
+tekście dotyczącym wyboru terminu lub adresie strony. Weryfikacja
 dostępności wyników rozpoczyna się po wykryciu `div.card-body span` z tekstem
-`x`; nie ma dodatkowego sekundowego oczekiwania przed sprawdzeniem komunikatu o
-braku terminów. Jeśli Lux Med
-zmieni strukturę strony lub komunikat, może być konieczna aktualizacja reguł w
-`scripts/detector.js`. Jeśli po odświeżeniu pojawi się wybór usługi, monitor
-klika pierwszy przycisk z ostatnio wyszukiwaną usługą w
-`.recent-search-parameters-box`, a następnie widoczny, aktywny przycisk
-`button[type="submit"].btn-search`. Jeśli przycisk jest wyłączony, monitor
-sprawdza go ponownie co sekundę i klika, gdy stanie się aktywny.
+`x` lub `-`; nie ma dodatkowego sekundowego oczekiwania przed sprawdzeniem
+komunikatu o braku terminów. Jeśli Lux Med zmieni strukturę strony lub
+komunikat, może być konieczna aktualizacja reguł w `scripts/detector.js`. Po
+odświeżeniu lub uruchomieniu monitora na formularzu wyszukiwania rozszerzenie
+wybiera ostatnią usługę, jeśli jest widoczna, a następnie klika przycisk
+`button[type="submit"].btn-search`. Aktywny przycisk klika od razu; jeśli jest
+wyłączony, sprawdza go ponownie co sekundę i klika po uaktywnieniu.
 
 Monitor działa tylko w domenie `luxmed.pl` i jej subdomenach.

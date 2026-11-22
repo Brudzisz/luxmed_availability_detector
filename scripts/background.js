@@ -184,6 +184,23 @@ async function handlePageStatus(pageState, tabId, { scheduleCheck = true } = {})
 
   if (pageState?.hasSearchForm || pageState?.isSubmittingSearch) {
     await chrome.alarms.clear(REFRESH_ALARM);
+    if (pageState?.hasSearchForm && !pageState?.isSubmittingSearch) {
+      try {
+        const result = await sendTabMessage(tabId, {
+          type: "SUBMIT_SEARCH"
+        });
+        if (!result?.ok) {
+          throw new Error(result?.error ?? "Nie udało się rozpocząć wyszukiwania.");
+        }
+      } catch (error) {
+        await setMonitorState({
+          status: "search-error",
+          error: error instanceof Error ? error.message : String(error),
+          lastCheckedAt: Date.now()
+        });
+        return;
+      }
+    }
     await setMonitorState({
       status: "searching",
       lastAvailability: "unknown",

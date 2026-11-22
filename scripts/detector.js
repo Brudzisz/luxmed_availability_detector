@@ -1,6 +1,4 @@
 (() => {
-  const NO_TERMS_TEXT =
-    "Nie ma dostępnych terminów. Zapoznaj się z opisami na powyższym kalendarzu, aby dowiedzieć się, kiedy warto wyszukać ponownie.";
   const APPOINTMENT_CUES = [
     "wybierz termin",
     "dostępne terminy",
@@ -16,20 +14,21 @@
 
   function hasResultsReadyMarker(document) {
     return Array.from(document.querySelectorAll("div.card-body span")).some(
-      (span) => span.textContent?.trim() === "x"
+      (span) => {
+        const marker = span.textContent?.trim();
+        return marker === "x" || marker === "-";
+      }
     );
   }
 
   function detectAppointmentPage(document, location) {
     const bodyText = normalize(document.body?.innerText ?? "");
-    const noTermsText = normalize(NO_TERMS_TEXT);
     const hasResultsReady = hasResultsReadyMarker(document);
-    const noTermsElement = document.querySelector("app-no-terms-info");
+    const noTermsElement = document.querySelector(
+      "app-no-terms-info .no-terms-message"
+    );
     const hasNoTermsMessage =
-      hasResultsReady &&
-      (Boolean(noTermsElement) ||
-        bodyText.includes(noTermsText) ||
-        bodyText.includes("nie ma dostępnych terminów"));
+      hasResultsReady && Boolean(noTermsElement);
 
     const hasAppointmentCue = APPOINTMENT_CUES.some((cue) =>
       bodyText.includes(cue)

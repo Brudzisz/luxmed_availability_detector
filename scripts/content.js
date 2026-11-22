@@ -84,7 +84,7 @@
         recentSearchButton.getClientRects().length > 0
       ),
       hasSearchForm: Boolean(
-        hasSearchButton && (shouldSubmitSearch || searchSubmissionPending)
+        hasSearchButton && !detectedState.hasResultsReady
       ),
       isSubmittingSearch: searchSubmissionPending
     };
@@ -221,6 +221,18 @@
         ok: true,
         serviceName: recentSearchButton.textContent.trim()
       });
+      return false;
+    }
+
+    if (message.type === "SUBMIT_SEARCH") {
+      if (searchSubmitAttempted) {
+        sendResponse({ ok: true, alreadySubmitted: true });
+        return false;
+      }
+
+      shouldSubmitSearch = true;
+      submitSearchIfReady();
+      sendResponse({ ok: true });
       return false;
     }
 
